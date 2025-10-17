@@ -1,0 +1,78 @@
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">我的票券錢包</h1>
+
+    <% if @tickets&.any? %>
+      <div class="space-y-4">
+        <% @tickets.each do |ticket| %>
+          <div class="rounded-lg p-6 shadow-md <%= ticket_card_class(ticket) %>">
+            <!-- 頂部資訊 -->
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <div class="text-sm text-gray-500 mb-1">
+                  票券代碼
+                </div>
+                <div class="font-mono text-lg font-semibold text-gray-800">
+                  <%= ticket.ticket_code %>
+                </div>
+              </div>
+
+              <!-- 狀態標籤 -->
+              <span class="px-4 py-2 rounded-full text-sm font-semibold <%= status_badge_class(ticket) %>">
+                <%= ticket_status_text(ticket) %>
+              </span>
+            </div>
+
+            <!-- 商品資訊 -->
+            <div class="border-t pt-4">
+              <h2 class="text-xl font-bold text-gray-800 mb-2">
+                <%= ticket.product.name %>
+              </h2>
+
+              <div class="text-sm text-gray-600 mb-2">
+                商家：<span class="font-medium"><%= ticket.product.merchant.shop_name %></span>
+              </div>
+
+              <div class="flex items-center gap-6 text-sm">
+                <div class="text-gray-700">
+                  <span class="text-gray-500">價值：</span>
+                  <span class="font-semibold text-lg text-green-600">
+                    <%= format_price(ticket.order.unit_price) %>
+                  </span>
+                </div>
+
+                <div class="text-gray-700">
+                  <span class="text-gray-500">有效期限：</span>
+                  <span class="font-medium">
+                    <%= ticket.valid_until&.strftime("%Y/%m/%d %H:%M") || "無限期" %>
+                  </span>
+                </div>
+              </div>
+
+              <!-- 使用時間（如果已使用） -->
+              <% if ticket.used? %>
+                <div class="mt-3 text-sm text-gray-500 bg-gray-100 p-2 rounded">
+                  使用時間：<%= ticket.used_at.strftime("%Y/%m/%d %H:%M") %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 票券統計 -->
+      <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div class="text-sm text-blue-800">
+          總票券數：<span class="font-bold"><%= @tickets.count %></span> 張
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-16 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 
+  2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 
+  13H4"></path>
+        </svg>
+        <p class="text-gray-500 text-lg">目前沒有票券</p>
+      </div>
+    <% end %>
+</div>

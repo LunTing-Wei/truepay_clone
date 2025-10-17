@@ -1,0 +1,52 @@
+<div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">訂單確認</h1>
+
+      <!-- 商品資訊卡片 -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <!-- 商品圖片（目前用佔位符） -->
+        <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center rounded-lg mb-4">
+          <span class="text-white text-6xl">🎫</span>
+        </div>
+
+        <!-- 商品資訊 -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+          <%= @product.name %>
+        </h2>
+
+        <p class="text-gray-600 mb-4">
+          <%= @product.description %>
+        </p>
+
+        <div class="text-2xl font-bold text-green-600 mb-4">
+          單價：NT$ <%= @product.price.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %>
+        </div>
+
+        <div class="text-sm text-gray-600">
+          庫存：<span class="font-semibold text-green-600"><%= @product.stock %> 件</span>
+        </div>
+      </div>
+
+      <!-- 訂單表單 -->
+      <%= form_with model: @order, url: orders_path, method: :post, class: "bg-white rounded-lg shadow-md p-6" do |f| %>
+        <!-- 隱藏欄位：product_id -->
+        <%= f.hidden_field :product_id, value: @product.id %>
+
+        <!-- 購買數量 -->
+        <div class="mb-6">
+          <%= f.label :quantity, "購買數量", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+          <%= f.number_field :quantity, min: 1, max: @product.stock, value: 1, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg 
+  focus:border-blue-500 focus:outline-none" %>
+          <p class="text-sm text-gray-500 mt-1">最多可購買 <%= @product.stock %> 件</p>
+        </div>
+
+        <!-- 按鈕 -->
+        <div class="flex gap-4">
+          <%= f.submit "確認購買", class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold cursor-pointer"
+   %>
+          <%= link_to "返回商店", store_path(@product.merchant), class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg 
+  hover:bg-gray-300 font-semibold text-center" %>
+        </div>
+      <% end %>
+    </div>
+</div>

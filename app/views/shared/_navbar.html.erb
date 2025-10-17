@@ -1,0 +1,39 @@
+<nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <%= link_to "TruePay", root_path, class: "text-2xl font-bold text-blue-600 hover:text-blue-700" %>
+        </div>
+
+        <!-- 導航連結 -->
+        <div class="flex items-center gap-4">
+          <% if member_signed_in? %>
+            <!-- 已登入 -->
+            <span class="text-gray-600 text-sm">
+              <%= current_member.email %>
+            </span>
+
+            <% if current_member.merchant? %>
+              <!-- 商家選單 -->
+              <%= link_to "商品管理", products_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+              <%= link_to "我的商店", store_path(current_member.merchant), class: "text-gray-700 hover:text-blue-600 font-medium" %>
+            <% else %>
+              <!-- 消費者選單 -->
+              <%= link_to "我的票券", tickets_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+            <% end %>
+
+            <%= button_to "登出", destroy_member_session_path, method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg 
+  hover:bg-red-600 font-medium" %>
+          <% else %>
+            <!-- 未登入 -->
+            <%= link_to "登入", new_member_session_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+            <%= link_to "註冊", new_member_registration_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 
+  font-medium" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+</nav>
+<!-- 佔位空間（因為 navbar 是 fixed） -->
+<div class="h-16"></div>

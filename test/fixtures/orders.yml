@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  product: one
+  quantity: 1
+  unit_price: 9.99
+  amount: 1
+  status: 1
+  provider: 1
+  paid_at: 2025-10-16 14:17:57
+
+two:
+  customer: two
+  product: two
+  quantity: 1
+  unit_price: 9.99
+  amount: 1
+  status: 1
+  provider: 1
+  paid_at: 2025-10-16 14:17:57

@@ -1,0 +1,58 @@
+<%= form_with model: product, class: "space-y-6" do |f| %>
+      <%# 顯示錯誤訊息 %>
+      <% if product.errors.any? %>
+        <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+          <h3 class="text-red-800 font-semibold mb-2">發生 <%= product.errors.count %> 個錯誤：</h3>
+          <ul class="list-disc list-inside text-red-700 text-sm">
+            <% product.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%# 商品名稱 %>
+      <div>
+        <%= f.label :name, "商品名稱", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= f.text_field :name, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none", 
+  placeholder: "例如：演唱會門票" %>
+      </div>
+
+      <%# 商品描述 %>
+      <div>
+        <%= f.label :description, "商品描述", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= f.text_area :description, rows: 4, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 
+  focus:outline-none", placeholder: "描述商品的詳細資訊..." %>
+      </div>
+
+      <%# 價格和庫存 %>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :price, "價格 (NT$)", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+          <%= f.number_field :price, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none", 
+  placeholder: "500" %>
+        </div>
+
+        <div>
+          <%= f.label :stock, "庫存數量", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+          <%= f.number_field :stock, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none", 
+  placeholder: "10" %>
+        </div>
+      </div>
+
+      <%# 票券有效期限（選填） %>
+      <div>
+        <%= f.label :ticket_expiry, "票券有效期限（選填）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= f.datetime_field :ticket_expiry, class: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 
+  focus:outline-none" %>
+        <p class="text-sm text-gray-500 mt-1">留空則使用預設 180 天</p>
+      </div>
+
+      <%# 按鈕 %>
+      <div class="flex gap-4">
+        <%= f.submit "建立商品", class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold cursor-pointer" 
+  %>
+        <%= link_to "取消", products_path, class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 font-semibold 
+  text-center" %>
+      </div>
+<% end %>

@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-gray-50">
+    <!-- 商店頁首 -->
+    <div class="bg-white shadow-sm border-b-2 border-gray-200">
+      <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+          <%= @merchant.shop_name %>
+        </h1>
+        <p class="text-gray-600">
+          商店網址：<span class="font-mono text-blue-600"><%= @merchant.subdomain %>.truepay.tw</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- 商品列表 -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">商品列表</h2>
+
+      <% if @products&.any? %>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @products.each do |product| %>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-full">
+              <!-- 商品圖片區（目前沒有圖片，先用佔位符） -->
+              <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-6xl">🎫</span>
+              </div>
+
+              <!-- 商品資訊 -->
+              <div class="p-6 flex flex-col flex-grow">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">
+                  <%= product.name %>
+                </h3>
+
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <%= product.description %>
+                </p>
+
+                <!-- 價格 -->
+                <div class="flex items-baseline mb-4">
+                  <span class="text-2xl font-bold text-green-600">NT$ <%= product.price.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></span>
+                </div>
+
+                <!-- 庫存 -->
+                <div class="mb-4">
+                  <% if product.stock > 0 %>
+                    <span class="text-sm text-gray-600">
+                      庫存：<span class="font-semibold text-green-600"><%= product.stock %> 件</span>
+                    </span>
+                  <% else %>
+                    <span class="text-sm font-semibold text-red-600">已售完</span>
+                  <% end %>
+                </div>
+
+                <!-- 購買按鈕（置底） -->
+                <div class="mt-auto">
+                  <% if product.stock > 0 %>
+                    <%= link_to "立即購買", new_order_path(product_id: product.id), class: "block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 font-semibold transition" %>
+                  <% else %>
+                    <button disabled class="block w-full bg-gray-300 text-gray-500 text-center py-3 rounded-lg cursor-not-allowed font-semibold">已售完</button>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-16 bg-white rounded-lg shadow-sm">
+          <p class="text-gray-500 text-lg">目前沒有商品上架</p>
+        </div>
+      <% end %>
+    </div>
+</div>

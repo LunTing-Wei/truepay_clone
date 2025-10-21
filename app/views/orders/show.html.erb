@@ -61,17 +61,39 @@
       </div>
 
       <!-- 按鈕區 -->
-      <div class="flex gap-4">
-        <% if @order.pending? %>
-          <%= button_to "模擬付款", pay_order_path(@order), method: :post, class: "flex-1 bg-green-600 text-white px-6 py-3 rounded-lg 
-  hover:bg-green-700 font-semibold" %>
-        <% else %>
-          <%= link_to "查看我的票券", tickets_path, class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 
-  font-semibold text-center" %>
-        <% end %>
+     <% if @order.pending? %>
+          <!-- 付款選項 -->
+          <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">選擇付款方式</h2>
 
-        <%= link_to "返回商店", store_path(@order.product.merchant), class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg 
+            <div class="space-y-3">
+              <!-- LINE Pay 付款 -->
+              <%= button_to linepay_request_order_path(@order), method: :post, data: { turbo: false }, class: "w-full bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 font-semibold flex items-center justify-center gap-2 transition-colors" do %>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0H5C2.239 0 0 2.239 0 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5V5c0-2.761-2.238-5-5-5zm-3.732 
+  17.621l-1.49-1.867h-3.022v1.867H9.021V6.379h4.39c1.726 0 3.148 1.421 3.148 3.147 0 1.254-.746 2.328-1.816 2.82l2.025 2.537c.427.537.427 
+  1.287 0 1.738z"/>
+                </svg>
+                <span>LINE Pay 付款</span>
+              <% end %>
+
+              <!-- 測試付款（模擬） -->
+              <%= button_to pay_order_path(@order), method: :post, data: { turbo: false }, class: "w-full bg-gray-600 text-white px-6 py-4 rounded-lg hover:bg-gray-700 font-semibold flex items-center justify-center gap-2 transition-colors" do %>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <span>測試付款（開發用）</span>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <!-- 已付款狀態 -->
+          <div class="flex gap-4">
+            <%= link_to "查看我的票券", tickets_path, class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 
+  font-semibold text-center" %>
+            <%= link_to "返回商店", store_path(@order.product.merchant), class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg 
   hover:bg-gray-300 font-semibold text-center" %>
-      </div>
+          </div>
+        <% end %>
     </div>
 </div>

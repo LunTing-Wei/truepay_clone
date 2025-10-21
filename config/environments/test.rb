@@ -39,6 +39,9 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
 
+  # Set host for controller URL helpers (needed for LINE Pay callbacks)
+  config.action_controller.default_url_options = { host: "test.example.com", protocol: "https" }
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

@@ -1,21 +1,27 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+pending_order:
   customer: one
   product: one
-  quantity: 1
-  unit_price: 9.99
-  amount: 1
-  status: 1
+  quantity: 2
+  unit_price: 100
+  amount: 200
+  status: 0
   provider: 1
-  paid_at: 2025-10-16 14:17:57
+  paid_at: ~
+  transaction_id: ~
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
 
-two:
-  customer: two
+paid_order:
+  customer: one
   product: two
   quantity: 1
-  unit_price: 9.99
-  amount: 1
+  unit_price: 200
+  amount: 200
   status: 1
   provider: 1
-  paid_at: 2025-10-16 14:17:57
+  paid_at: <%= 6.hours.ago %>
+  transaction_id: "test_txn_123456"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 6.hours.ago %>

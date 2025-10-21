@@ -2,10 +2,14 @@
 
 one:
   member: one
-  name: MyString
-  phone: MyString
+  name: "測試顧客"
+  phone: "0912345678"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
 
 two:
-  member: two
-  name: MyString
-  phone: MyString
+  member: merchant_one
+  name: "商家顧客"
+  phone: "0987654321"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

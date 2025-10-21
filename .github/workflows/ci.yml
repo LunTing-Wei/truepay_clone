@@ -1,9 +1,10 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
   scan_ruby:
@@ -84,7 +85,11 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
+      - name: Set up test credentials
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
+        run: |
+          echo "$RAILS_MASTER_KEY" > config/master.key
       - name: Run tests
         env:
           RAILS_ENV: test

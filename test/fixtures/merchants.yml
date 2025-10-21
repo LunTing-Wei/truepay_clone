@@ -1,11 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  member: one
-  shop_name: MyString
-  subdomain: MyString
-
-two:
-  member: two
-  shop_name: MyString
-  subdomain: MyString
+  member: merchant_one
+  shop_name: "測試商店"
+  subdomain: "testshop"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

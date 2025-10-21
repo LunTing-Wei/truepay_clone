@@ -15,6 +15,19 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
+  # 允許 ngrok 和本地開發環境的 host
+  ngrok_host = ENV.fetch('NGROK_HOST', nil)
+
+  if ngrok_host.present?
+    config.hosts << ngrok_host
+    config.hosts << /.*\.ngrok.*\.app$/  # 支援所有 ngrok 域名格式
+  end
+
+  # 允許本地開發環境
+  config.hosts << "localhost"
+  config.hosts << /.*\.local$/
+  config.hosts << "127.0.0.1"
+
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?
@@ -37,8 +50,12 @@ Rails.application.configure do
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # 動態設定 default URL options（支援 ngrok 和本地開發）
+  default_host = ENV.fetch('NGROK_HOST', 'localhost:3000')
+  default_protocol = ENV.fetch('NGROK_HOST', nil).present? ? 'https' : 'http'
+
+  config.action_mailer.default_url_options = { host: default_host, protocol: default_protocol }
+  config.action_controller.default_url_options = { host: default_host, protocol: default_protocol }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

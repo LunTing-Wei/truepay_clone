@@ -62,6 +62,13 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  #webmock
+  gem "webmock"
 end
 
 gem "devise", "~> 4.9"
+
+# LINE Pay integration
+gem 'httparty'
+gem "dotenv-rails", "~> 3.1", :group => :development

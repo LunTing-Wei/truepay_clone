@@ -1,10 +1,11 @@
 class LinePayService
   include HTTParty
 
-  base_uri Rails.application.credentials.line_pay[:sandbox_url]
+  base_uri ENV.fetch('LINE_PAY_SANDBOX_URL') { Rails.application.credentials.line_pay[:sandbox_url] }
+
   def initialize
-    @channel_id = Rails.application.credentials.line_pay[:channel_id]
-    @channel_secret = Rails.application.credentials.line_pay[:channel_secret]
+    @channel_id = ENV.fetch('LINE_PAY_CHANNEL_ID') { Rails.application.credentials.line_pay[:channel_id] }
+    @channel_secret = ENV.fetch('LINE_PAY_CHANNEL_SECRET') { Rails.application.credentials.line_pay[:channel_secret] }
   end
 
   def request_payment(order)

@@ -85,16 +85,13 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - name: Set up test credentials
-        env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
-        run: |
-          echo "$RAILS_MASTER_KEY" > config/master.key
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          # REDIS_URL: redis://localhost:6379/0
+          LINE_PAY_CHANNEL_ID: test_channel_id
+          LINE_PAY_CHANNEL_SECRET: test_channel_secret
+          LINE_PAY_SANDBOX_URL: https://sandbox-api-pay.line.me
         run: bin/rails db:test:prepare test test:system
 
       - name: Keep screenshots from failed system tests

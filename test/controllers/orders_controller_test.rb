@@ -77,7 +77,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   # Test: LINE Pay request 成功
   test "should request LINE Pay payment successfully" do
     # Mock LINE Pay API 回傳成功
-    stub_request(:post, "#{Rails.application.credentials.line_pay[:sandbox_url]}/v3/payments/request")
+    stub_request(:post, "https://sandbox-api-pay.line.me/v3/payments/request")
       .to_return(
         status: 200,
         body: {
@@ -104,7 +104,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   # Test: LINE Pay request 失敗
   test "should handle LINE Pay request failure" do
     # Mock LINE Pay API 回傳失敗
-    stub_request(:post, "#{Rails.application.credentials.line_pay[:sandbox_url]}/v3/payments/request")
+    stub_request(:post, "https://sandbox-api-pay.line.me/v3/payments/request")
       .to_return(
         status: 200,
         body: {

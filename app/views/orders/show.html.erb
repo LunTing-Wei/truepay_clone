@@ -86,14 +86,67 @@
               <% end %>
             </div>
           </div>
-        <% else %>
-          <!-- 已付款狀態 -->
-          <div class="flex gap-4">
-            <%= link_to "查看我的票券", tickets_path, class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 
+       <% else %>
+            <!-- 已付款 - 顯示票券 QR Code -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 class="text-lg font-bold text-gray-800 mb-4">您的票券</h2>
+
+              <% @order.items.each do |ticket| %>
+                <div class="border rounded-lg p-4 mb-4 last:mb-0">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="text-sm text-gray-500">票券編號</p>
+                      <p class="font-mono text-sm font-semibold text-gray-800"><%= ticket.ticket_code %></p>
+                    </div>
+
+                    <div>
+                      <% if ticket.unused? %>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                          未使用
+                        </span>
+                      <% elsif ticket.used? %>
+                        <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">
+                          已使用
+                        </span>
+                      <% elsif ticket.expired? %>
+                        <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
+                          已過期
+                        </span>
+                      <% end %>
+                    </div>
+                  </div>
+
+                  <% if ticket.unused? %>
+                    <!-- QR Code -->
+                    <div class="bg-gray-50 rounded-lg p-4 flex justify-center">
+                      <%= ticket.qr_code_svg.html_safe %>
+                    </div>
+
+                    <p class="text-xs text-gray-500 text-center mt-2">
+                      請出示此 QR Code 給商家掃描核銷
+                    </p>
+                  <% else %>
+                    <p class="text-sm text-gray-500 text-center py-4">
+                      此票券已無法使用
+                    </p>
+                  <% end %>
+
+                  <% if ticket.valid_until.present? %>
+                    <p class="text-xs text-gray-500 text-center mt-2">
+                      有效期限：<%= ticket.valid_until.strftime('%Y-%m-%d %H:%M') %>
+                    </p>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- 返回按鈕 -->
+            <div class="flex gap-4">
+              <%= link_to "查看所有票券", tickets_path, class: "flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold 
+  text-center" %>
+              <%= link_to "返回商店", store_path(@order.product.store), class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 
   font-semibold text-center" %>
-            <%= link_to "返回商店", store_path(@order.product.merchant), class: "flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg 
-  hover:bg-gray-300 font-semibold text-center" %>
-          </div>
-        <% end %>
+            </div>
+          <% end %>
     </div>
 </div>

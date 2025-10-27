@@ -21,6 +21,17 @@ class OrderItem < ApplicationRecord
       valid_until && Time.current > valid_until
   end
 
+  def qr_code_svg
+    require 'rqcode'
+
+    qr = RQRCode::QRCode.new(ticket_code)
+    qr.as_svg(
+      module_size: 4,
+      standalone: true,
+      use_path: true
+    )
+  end
+
     private
 
   def generate_ticket_code

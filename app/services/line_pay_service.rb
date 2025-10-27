@@ -1,11 +1,11 @@
 class LinePayService
   include HTTParty
 
-  base_uri ENV.fetch('LINE_PAY_SANDBOX_URL') { Rails.application.credentials.line_pay[:sandbox_url] }
+  base_uri ENV.fetch("LINE_PAY_SANDBOX_URL") { Rails.application.credentials.line_pay[:sandbox_url] }
 
   def initialize
-    @channel_id = ENV.fetch('LINE_PAY_CHANNEL_ID') { Rails.application.credentials.line_pay[:channel_id] }
-    @channel_secret = ENV.fetch('LINE_PAY_CHANNEL_SECRET') { Rails.application.credentials.line_pay[:channel_secret] }
+    @channel_id = ENV.fetch("LINE_PAY_CHANNEL_ID") { Rails.application.credentials.line_pay[:channel_id] }
+    @channel_secret = ENV.fetch("LINE_PAY_CHANNEL_SECRET") { Rails.application.credentials.line_pay[:channel_secret] }
   end
 
   def request_payment(order)
@@ -40,7 +40,7 @@ class LinePayService
 
     # 轉成 JSON 並生成簽章
     request_body_json = request_body.to_json
-    uri = '/v3/payments/request'
+    uri = "/v3/payments/request"
     nonce = SecureRandom.uuid
     signature = generate_signature(uri, request_body_json, nonce)
 
@@ -48,10 +48,10 @@ class LinePayService
       uri,
       body: request_body_json,
       headers: {
-        'Content-Type' => 'application/json',
-        'X-LINE-ChannelId' => @channel_id,
-        'X-LINE-Authorization-Nonce' => nonce,
-        'X-LINE-Authorization' => signature
+        "Content-Type" => "application/json",
+        "X-LINE-ChannelId" => @channel_id,
+        "X-LINE-Authorization-Nonce" => nonce,
+        "X-LINE-Authorization" => signature
       }
     )
 
@@ -59,17 +59,17 @@ class LinePayService
     Rails.logger.info "LINE Pay response - Code: #{response.code}, ReturnCode: #{response['returnCode']}"
 
     # 處理回應
-    if response.code == 200 && response['returnCode'] == '0000'
+    if response.code == 200 && response["returnCode"] == "0000"
       {
         success: true,
-        transaction_id: response['info']['transactionId'],
-        payment_url: response['info']['paymentUrl']['web']
+        transaction_id: response["info"]["transactionId"],
+        payment_url: response["info"]["paymentUrl"]["web"]
       }
     else
       Rails.logger.error "LINE Pay request failed - ReturnCode: #{response['returnCode']}, Message: #{response['returnMessage']}"
       {
         success: false,
-        error_message: response['returnMessage'] || 'Unknown error'
+        error_message: response["returnMessage"] || "Unknown error"
       }
     end
   rescue HTTParty::Error, Timeout::Error, StandardError => e
@@ -95,31 +95,42 @@ class LinePayService
       uri,
       body: request_body_json,
       headers: {
-        'Content-Type' => 'application/json',
-        'X-LINE-ChannelId' => @channel_id,
-        'X-LINE-Authorization-Nonce' => nonce,
-        'X-LINE-Authorization' => signature
+        "Content-Type" => "application/json",
+        "X-LINE-ChannelId" => @channel_id,
+        "X-LINE-Authorization-Nonce" => nonce,
+        "X-LINE-Authorization" => signature
       }
     )
 
     Rails.logger.info "LINE Pay confirm - TransactionId: #{transaction_id}, Amount: #{amount}"
     Rails.logger.info "LINE Pay confirm response - Code: #{response.code}, ReturnCode: #{response['returnCode']}"
 
-    if response.code == 200 && response['returnCode'] == '0000'
-      true
+    if response.code == 200 && response["returnCode"] == "0000"
+      {
+        success: true,
+        transaction_id: transaction_id,
+        info: response["info"]
+      }
     else
       Rails.logger.error "LINE Pay confirm failed - TransactionId: #{transaction_id}, ReturnCode: #{response['returnCode']}, Message: #{response['returnMessage']}"
-      false
+      {
+        success: false,
+        error_code: response["returnCode"],
+        error_message: response["returnMessage"] || "Unknown error"
+      }
     end
   rescue HTTParty::Error, Timeout::Error, StandardError => e
     Rails.logger.error "LINE Pay confirm exception - #{e.class}: #{e.message}"
-    false
+    {
+      success: false,
+      error_message: "網路錯誤：#{e.message}"
+    }
   end
 
   private
 
   def generate_signature(uri, body, nonce)
     message = @channel_secret + uri + body + nonce
-    Base64.strict_encode64(OpenSSL::HMAC.digest('SHA256', @channel_secret, message))
+    Base64.strict_encode64(OpenSSL::HMAC.digest("SHA256", @channel_secret, message))
   end
 end

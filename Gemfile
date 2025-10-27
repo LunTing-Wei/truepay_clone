@@ -72,4 +72,4 @@ gem "devise", "~> 4.9"
 # LINE Pay integration
 gem 'httparty'
 gem "dotenv-rails", "~> 3.1", :group => :development
-gem 'rqrcode', '~> 2.0'
+gem 'rqrcode', '~> 3.1'

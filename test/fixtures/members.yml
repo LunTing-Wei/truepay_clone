@@ -19,3 +19,19 @@ merchant_one:
   member_type: 1
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+# Pending Merchant Member (待審核商家)
+pending_merchant_member:
+  email: pending_merchant@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(Member, 'password123') %>
+  member_type: 1
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
+# Rejected Merchant Member (被拒絕商家)
+rejected_merchant_member:
+  email: rejected_merchant@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(Member, 'password123') %>
+  member_type: 1
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>

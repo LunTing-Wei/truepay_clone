@@ -4,5 +4,24 @@ one:
   member: merchant_one
   shop_name: "測試商店"
   subdomain: "testshop"
+  verification_status: 1 # approved（已審核通過）
+  verified_at: <%= 1.day.ago %>
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+pending_merchant:
+  member: pending_merchant_member
+  shop_name: "待審核商店"
+  subdomain: "pendingshop"
+  verification_status: 0 # pending（待審核）
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
+rejected_merchant:
+  member: rejected_merchant_member
+  shop_name: "被拒絕商店"
+  subdomain: "rejectedshop"
+  verification_status: 2 # rejected（已拒絕）
+  rejection_reason: "營業登記資料不符"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>

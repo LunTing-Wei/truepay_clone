@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_022629) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_28_062243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,8 +42,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_022629) do
     t.string "subdomain"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "verification_status", default: 0, null: false
+    t.datetime "verified_at"
+    t.text "rejection_reason"
+    t.string "unified_number"
+    t.string "owner_name"
+    t.string "owner_id_last_four"
+    t.string "business_address"
+    t.string "phone"
+    t.string "customer_service_email"
+    t.string "bank_account"
     t.index ["member_id"], name: "index_merchants_on_member_id"
     t.index ["subdomain"], name: "index_merchants_on_subdomain", unique: true
+    t.index ["unified_number"], name: "index_merchants_on_unified_number", unique: true, where: "(unified_number IS NOT NULL)"
   end
 
   create_table "order_items", force: :cascade do |t|
